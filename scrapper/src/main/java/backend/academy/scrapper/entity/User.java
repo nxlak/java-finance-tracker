@@ -19,7 +19,7 @@ public class User {
     @Id
     private Long chatId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Transaction> transactionList;
 
 }

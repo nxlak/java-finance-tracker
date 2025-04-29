@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 
-public record TransactionRequestDto(
+public record TransactionResponseDto(
         @NotNull @Positive double amount,
         @NotBlank String category,
         @NotBlank String description,
