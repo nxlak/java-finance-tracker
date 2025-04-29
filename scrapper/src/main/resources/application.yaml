@@ -1,0 +1,24 @@
+app:
+  token: ${TOKEN} # env variable
+
+spring:
+  application:
+    name: Scrapper
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finance-tracker
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+server:
+  port: 8081
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui

@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "app",
+      "type": "backend.academy.bot.BotConfig",
+      "sourceType": "backend.academy.bot.BotConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "app.scrapper-base-url",
+      "type": "java.lang.String",
+      "sourceType": "backend.academy.bot.BotConfig"
+    },
+    {
+      "name": "app.telegram-token",
+      "type": "java.lang.String",
+      "sourceType": "backend.academy.bot.BotConfig"
+    }
+  ],
+  "hints": []
+}
