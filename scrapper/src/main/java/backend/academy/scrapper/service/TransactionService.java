@@ -26,7 +26,7 @@ public class TransactionService {
         this.userRepository = userRepository;
     }
 
-    public void addTransaction(Long chatId, TransactionRequestDto transactionRequestDto) {
+    public Long addTransaction(Long chatId, TransactionRequestDto transactionRequestDto) {
 
         User user = userRepository.findById(chatId).orElseThrow(() -> new FinanceTrackerException("User not found with chatId: " + chatId));
 
@@ -37,47 +37,44 @@ public class TransactionService {
         transaction.setCreatedAt(transactionRequestDto.timestamp());
         transaction.setUser(user);
 
-        transactionRepository.save(transaction);
+        return transactionRepository.save(transaction).getTransactionId();
+
 
     }
 
-    public List<Transaction> getCommonInfo(Long chatId, LocalDateTime time) {
+    public List<TransactionResponseDto> getCommonInfo(Long chatId, LocalDateTime time) {
+        LocalDateTime truncatedTime = truncateToDayStart(time);
 
-        User user = userRepository.findById(chatId).orElseThrow(() -> new FinanceTrackerException("User not found with chatId: " + chatId));
+        User user = userRepository.findById(chatId)
+                .orElseThrow(() -> new FinanceTrackerException("User not found with chatId: " + chatId));
 
-        if (user.getTransactionList().isEmpty()) {
-            throw new FinanceTrackerException("User " + chatId + " hasn't transactions");
-        }
-
-        List<Transaction> result = new ArrayList<>();
-
-        for (Transaction transaction : user.getTransactionList()) {
-            if (!transaction.getCreatedAt().isBefore(time)) {
-                result.add(transaction);
-            }
-        }
-
-        return result;
+        return user.getTransactionList().stream()
+                .filter(t -> t.getCreatedAt().compareTo(truncatedTime) >= 0)
+                .map(this::toDto)
+                .toList();
     }
 
-    public List<Transaction> getTransactionsByCategory(Long chatId, String categoryName, LocalDateTime time) {
+    public List<TransactionResponseDto> getTransactionsByCategory(Long chatId, String categoryName, LocalDateTime time) {
+        LocalDateTime truncatedTime = truncateToDayStart(time);
 
-        User user = userRepository.findById(chatId).orElseThrow(() -> new FinanceTrackerException("User not found with chatId: " + chatId));
+        User user = userRepository.findById(chatId)
+                .orElseThrow(() -> new FinanceTrackerException("User not found with chatId: " + chatId));
 
-        if (user.getTransactionList().isEmpty()) {
-            throw new FinanceTrackerException("User " + chatId + " hasn't transactions");
-        }
+        return user.getTransactionList().stream()
+                .filter(t -> t.getCreatedAt().compareTo(truncatedTime) >= 0)
+                .filter(t -> t.getCategory().equalsIgnoreCase(categoryName))
+                .map(this::toDto)
+                .toList();
+    }
 
-        List<Transaction> result = new ArrayList<>();
-
-        for (Transaction transaction : user.getTransactionList()) {
-            if (!transaction.getCreatedAt().isBefore(time) && transaction.getCategory().equals(categoryName)) {
-                result.add(transaction);
-            }
-        }
-
-        return result;
-
+    private TransactionResponseDto toDto(Transaction transaction) {
+        return new TransactionResponseDto(
+                transaction.getTransactionId(),
+                transaction.getAmount(),
+                transaction.getCategory(),
+                transaction.getDescription(),
+                transaction.getCreatedAt()
+        );
     }
 
     public void remove(Long chatId, Long transactionId) {
@@ -107,7 +104,7 @@ public class TransactionService {
             throw new FinanceTrackerException("User with id " + chatId + " doesn't have transaction with id " + transactionId);
         }
 
-        TransactionResponseDto dto = new TransactionResponseDto(transaction.getAmount(), transaction.getCategory(),
+        TransactionResponseDto dto = new TransactionResponseDto(transaction.getTransactionId(), transaction.getAmount(), transaction.getCategory(),
                                                                 transaction.getDescription(), transaction.getCreatedAt());
 
         return dto;
@@ -120,6 +117,10 @@ public class TransactionService {
         }
 
         return transaction;
+    }
+
+    private LocalDateTime truncateToDayStart(LocalDateTime dateTime) {
+        return dateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
 
 }

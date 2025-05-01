@@ -22,22 +22,22 @@ public class TransactionController {
     }
 
     @PostMapping("/{chatId}/transactions")
-    public void addTransaction(
+    public Long addTransaction(
             @PathVariable Long chatId,
             @RequestBody TransactionRequestDto dto
     ) {
-        transactionService.addTransaction(chatId, dto);
+        return transactionService.addTransaction(chatId, dto);
     }
 
     @PostMapping("/{chatId}/common-info")
-    public List<Transaction> getCommonInfo(@PathVariable Long chatId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time) {
+    public List<TransactionResponseDto> getCommonInfo(@PathVariable Long chatId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time) {
 
         return transactionService.getCommonInfo(chatId, time);
 
     }
 
     @PostMapping("/info/{chatId}/category/{categoryName}")
-    public List<Transaction> getTransactionsByCategory(@PathVariable Long chatId, @PathVariable String categoryName, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time) {
+    public List<TransactionResponseDto> getTransactionsByCategory(@PathVariable Long chatId, @PathVariable String categoryName, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time) {
 
         return transactionService.getTransactionsByCategory(chatId, categoryName, time);
 

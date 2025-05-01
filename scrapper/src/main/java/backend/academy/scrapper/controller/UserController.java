@@ -16,7 +16,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/{chatId}")
+    @PostMapping("/users/{chatId}")
     public void registerChat(@PathVariable long chatId) {
         userService.registerUser(chatId);
     }
