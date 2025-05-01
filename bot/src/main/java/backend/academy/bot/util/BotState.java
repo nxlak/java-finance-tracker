@@ -1,0 +1,13 @@
+package backend.academy.bot.util;
+
+public enum BotState {
+    IDLE,
+    WAITING_FOR_AMOUNT,
+    WAITING_FOR_CATEGORY,
+    WAITING_FOR_DESCRIPTION,
+    WAITING_FOR_DATE,
+    WAITING_FOR_STAT_CATEGORY,
+    EDITING_TRANSACTION,
+    DELETING_TRANSACTION
+}
+
