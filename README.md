@@ -1,46 +1,46 @@
 # Finance Tracker
 
-Этот проект представляет собой систему для отслеживания финансовых операций, состоящую из двух модулей:
+This project is a financial tracking system consisting of two modules:
 
-* **scrapper** – REST API сервис на Spring Boot для управления пользователями и транзакциями
-* **bot** – Telegram-бот на Spring Boot и Java Telegram Bot API для взаимодействия с пользователем через чат
+* **scrapper** – a REST API service built with Spring Boot for managing users and transactions
+* **bot** – a Telegram bot built with Spring Boot and the Java Telegram Bot API for user interaction via chat
 
-## Начало работы
+## Getting Started
 
-### Шаг 1. Клонировать репозиторий
+### Step 1. Clone the Repository
 
 ```bash
 git clone https://github.com/nxlak/java-finance-tracker
 cd java-finance-tracker
 ```
 
-### Шаг 2. Настроить переменные окружения
+### Step 2. Configure Environment Variables
 
-* `TELEGRAM_TOKEN` – токен вашего Telegram-бота
+* `TELEGRAM_TOKEN` – your Telegram bot token
 
-### Шаг 3. Сборка и запуск
+### Step 3. Build and Run
 
-В корне проекта можно собрать оба модуля и прогнать тесты:
+You can build both modules and run tests from the project root:
 
 ```bash
 ./mvnw clean verify
 ```
 
-Или запускать модули по-отдельности:
+Or run each module individually:
 
 ```bash
-# Запуск scrapper (порт 8081)
+# Run scrapper (port 8081)
 cd scrapper
 ../mvnw spring-boot:run
 
-# В другом терминале, запуск bot (порт 8080)
+# In another terminal, run bot (port 8080)
 cd ../bot
 ../mvnw spring-boot:run
 ```
 
-## Использование Telegram-бота
+## Using the Telegram Bot
 
-1. В Telegram найдите ваш бот по токену или имени и отправьте команду `/start`.
-2. Следуйте меню.
-3. При добавлении трат бот попросит ввести сумму, категорию, описание и дату.
-4. Для статистики можно выбрать период.
+1. Find your bot in Telegram by its token or name and send the `/start` command.
+2. Follow the menu.
+3. When adding an expense, the bot will ask for the amount, category, description, and date.
+4. To view statistics, you can choose a time period.
